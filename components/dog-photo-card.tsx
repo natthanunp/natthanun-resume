@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Heart } from 'lucide-react'
 import { GlassCard } from './glass-card'
 import { likeDogPhoto, unlikeDogPhoto } from '@/app/dogs/actions'
+import { createClient } from '@/lib/supabase/client'
 
 interface DogPhotoCardProps {
   id: string
@@ -29,6 +30,43 @@ export function DogPhotoCard({
   const [isLiked, setIsLiked] = useState(initialIsLiked)
   const [isAnimating, setIsAnimating] = useState(false)
   const [showHeart, setShowHeart] = useState(false)
+
+  // Real-time subscription to dog_likes changes
+  useEffect(() => {
+    const supabase = createClient()
+
+    const channel = supabase
+      .channel(`dog_likes_${id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'dog_likes',
+          filter: `dog_picture_id=eq.${id}`,
+        },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            setLikes((prev) => prev + 1)
+            // Update isLiked if this session liked it
+            if (payload.new.session_id === sessionId) {
+              setIsLiked(true)
+            }
+          } else if (payload.eventType === 'DELETE') {
+            setLikes((prev) => prev - 1)
+            // Update isLiked if this session unliked it
+            if (payload.old.session_id === sessionId) {
+              setIsLiked(false)
+            }
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [id, sessionId])
 
   const handleDoubleClick = async () => {
     if (isLiked) {
