@@ -28,6 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Tell Dark Reader and similar extensions to not modify this site */}
+        <meta name="darkreader-lock" />
+      </head>
       <body className={`${inter.variable} ${spaceMono.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"

@@ -49,7 +49,7 @@ export function Header({ portfolioInfo }: HeaderProps) {
             <div className="relative h-10 w-10 rounded-full ring-2 ring-white/20 bg-gradient-to-br from-primary via-purple-500 to-pink-500 transition-all group-hover:ring-primary/50 dark:ring-white/10 flex items-center justify-center shadow-lg">
               <span className="text-lg font-bold text-white">NP</span>
             </div>
-            <span className="hidden text-lg font-mono font-semibold sm:block">
+            <span className="text-lg font-mono font-semibold">
               /natthanunp
             </span>
           </Link>
