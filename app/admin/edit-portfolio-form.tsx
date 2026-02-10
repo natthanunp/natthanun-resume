@@ -1,5 +1,7 @@
 'use client'
 
+import React from "react"
+
 import { useState } from 'react'
 import { GlassCard } from '@/components/glass-card'
 import { Button } from '@/components/ui/button'
@@ -36,11 +38,19 @@ export function EditPortfolioForm({ portfolioData }: EditPortfolioFormProps) {
     portfolioData.profile_image_url || '/images/profile.jpg'
   )
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     setIsLoading(true)
     setMessage('')
 
     try {
+      const formData = new FormData(e.currentTarget)
+      
+      // Ensure profile_image_url is included with the latest value
+      formData.set('profile_image_url', profileImageUrl)
+      
+      console.log('[v0] Submitting profile_image_url:', profileImageUrl)
+      
       await updatePortfolioInfo(formData)
       setMessage('Portfolio updated successfully!')
       router.refresh()
@@ -54,7 +64,7 @@ export function EditPortfolioForm({ portfolioData }: EditPortfolioFormProps) {
 
   return (
     <GlassCard>
-      <form action={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <input type="hidden" name="id" value={portfolioData.id} />
         
         <div className="space-y-6">
