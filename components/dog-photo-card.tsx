@@ -45,19 +45,36 @@ export function DogPhotoCard({
           table: 'dog_likes',
           filter: `dog_picture_id=eq.${id}`,
         },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
+        async (payload) => {
+          // Check if this change is from the current session
+          const isFromCurrentSession =
+            (payload.eventType === 'INSERT' && payload.new.session_id === sessionId) ||
+            (payload.eventType === 'DELETE' && payload.old.session_id === sessionId)
+
+          // For DELETE events, we need to refetch the count since payload.old doesn't include session_id
+          if (payload.eventType === 'DELETE') {
+            // Refetch actual count from database
+            const { count } = await supabase
+              .from('dog_likes')
+              .select('*', { count: 'exact', head: true })
+              .eq('dog_picture_id', id)
+
+            if (count !== null) {
+              setLikes(count)
+            }
+
+            // Check if current session still has a like
+            const { data: myLike } = await supabase
+              .from('dog_likes')
+              .select('id')
+              .eq('dog_picture_id', id)
+              .eq('session_id', sessionId)
+              .single()
+
+            setIsLiked(!!myLike)
+          } else if (!isFromCurrentSession && payload.eventType === 'INSERT') {
+            // Only increment if it's from another session
             setLikes((prev) => prev + 1)
-            // Update isLiked if this session liked it
-            if (payload.new.session_id === sessionId) {
-              setIsLiked(true)
-            }
-          } else if (payload.eventType === 'DELETE') {
-            setLikes((prev) => prev - 1)
-            // Update isLiked if this session unliked it
-            if (payload.old.session_id === sessionId) {
-              setIsLiked(false)
-            }
           }
         }
       )
@@ -80,10 +97,10 @@ export function DogPhotoCard({
       setIsLiked(true)
       setIsAnimating(true)
       setShowHeart(true)
-      
+
       setTimeout(() => setIsAnimating(false), 500)
       setTimeout(() => setShowHeart(false), 1000)
-      
+
       await likeDogPhoto(id, sessionId)
     }
   }

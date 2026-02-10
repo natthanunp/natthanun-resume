@@ -14,7 +14,7 @@ export async function likeDogPhoto(dogPhotoId: string, sessionId: string) {
   })
 
   if (error) {
-    console.error('[v0] Error liking dog photo:', error)
+    console.error('Error liking dog photo:', error)
     throw error
   }
 
@@ -41,7 +41,7 @@ export async function unlikeDogPhoto(dogPhotoId: string, sessionId: string) {
     .eq('session_id', sessionId)
 
   if (error) {
-    console.error('[v0] Error unliking dog photo:', error)
+    console.error('Error unliking dog photo:', error)
     throw error
   }
 
