@@ -1,11 +1,13 @@
 'use client'
 
+import React from "react"
+
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from './ui/button'
 import { ThemeToggle } from './theme-toggle'
-import { Heart, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 
 interface HeaderProps {
   portfolioInfo: {
@@ -21,7 +23,24 @@ export function Header({ portfolioInfo }: HeaderProps) {
     { href: '#about', label: 'About' },
     { href: '#experience', label: 'Experience' },
     { href: '#skills', label: 'Skills' },
+    { href: '#dogs', label: 'My Dogs' },
   ]
+
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
+    const element = document.querySelector(href)
+    if (element) {
+      const headerOffset = 65
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
+    }
+    setIsMenuOpen(false)
+  }
 
   return (
     <>
@@ -51,19 +70,9 @@ export function Header({ portfolioInfo }: HeaderProps) {
                 className="rounded-full hover:bg-white/50 dark:hover:bg-white/5"
                 asChild
               >
-                <a href={item.href}>{item.label}</a>
+                <a href={item.href} onClick={(e) => handleScroll(e, item.href)}>{item.label}</a>
               </Button>
             ))}
-            <Button
-              variant="ghost"
-              className="rounded-full hover:bg-white/50 dark:hover:bg-white/5"
-              asChild
-            >
-              <Link href="/dogs">
-                <Heart className="mr-2 h-4 w-4" />
-                My Dogs
-              </Link>
-            </Button>
             <ThemeToggle />
           </div>
 
@@ -93,22 +102,10 @@ export function Header({ portfolioInfo }: HeaderProps) {
                     variant="ghost"
                     className="w-full justify-start rounded-full hover:bg-white/50 dark:hover:bg-white/5"
                     asChild
-                    onClick={() => setIsMenuOpen(false)}
                   >
-                    <a href={item.href}>{item.label}</a>
+                    <a href={item.href} onClick={(e) => handleScroll(e, item.href)}>{item.label}</a>
                   </Button>
                 ))}
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start rounded-full hover:bg-white/50 dark:hover:bg-white/5"
-                  asChild
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Link href="/dogs">
-                    <Heart className="mr-2 h-4 w-4" />
-                    My Dogs
-                  </Link>
-                </Button>
               </div>
             </div>
           </div>
