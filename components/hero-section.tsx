@@ -4,10 +4,9 @@ import { Button } from './ui/button'
 
 interface HeroSectionProps {
   portfolioInfo: {
-    full_name: string
+    name: string
     title: string
     tagline: string
-    about_me: string
     email: string
     location: string
     github_url: string | null
@@ -25,7 +24,7 @@ export function HeroSection({ portfolioInfo }: HeroSectionProps) {
         <GlassCard className="text-center">
           <div className="mb-8">
             <h1 className="mb-2 text-5xl font-bold tracking-tight text-balance md:text-6xl lg:text-7xl">
-              {portfolioInfo.full_name}
+              {portfolioInfo.name}
             </h1>
             <p className="text-2xl font-semibold text-primary md:text-3xl">
               {portfolioInfo.title}

@@ -60,7 +60,7 @@ export default async function Home() {
         {/* Footer */}
         <footer className="border-t border-white/20 bg-white/70 backdrop-blur-2xl backdrop-saturate-150 dark:border-white/10 dark:bg-white/10 px-4 py-8 mt-20">
           <div className="mx-auto max-w-4xl text-center text-sm text-muted-foreground">
-            <p>© 2024 {portfolioData.full_name}. All rights reserved.</p>
+            <p>© 2024 {portfolioData.name}. All rights reserved.</p>
           </div>
         </footer>
       </main>

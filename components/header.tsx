@@ -9,7 +9,7 @@ import { Heart, Menu, X } from 'lucide-react'
 
 interface HeaderProps {
   portfolioInfo: {
-    full_name: string
+    name: string
     profile_image_url: string | null
   }
 }
@@ -32,13 +32,13 @@ export function Header({ portfolioInfo }: HeaderProps) {
             <div className="relative h-10 w-10 overflow-hidden rounded-full ring-2 ring-white/20 transition-all group-hover:ring-primary/50 dark:ring-white/10">
               <Image
                 src={portfolioInfo.profile_image_url || '/images/profile.jpg'}
-                alt={portfolioInfo.full_name}
+                alt={portfolioInfo.name}
                 fill
                 className="object-cover"
               />
             </div>
             <span className="hidden text-lg font-semibold sm:block">
-              {portfolioInfo.full_name}
+              {portfolioInfo.name}
             </span>
           </Link>
 
