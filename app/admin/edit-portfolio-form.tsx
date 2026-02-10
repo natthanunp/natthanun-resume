@@ -33,6 +33,7 @@ interface EditPortfolioFormProps {
 export function EditPortfolioForm({ portfolioData }: EditPortfolioFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
   const [message, setMessage] = useState('')
   const [profileImageUrl, setProfileImageUrl] = useState(
     portfolioData.profile_image_url || '/images/profile.jpg'
@@ -45,12 +46,6 @@ export function EditPortfolioForm({ portfolioData }: EditPortfolioFormProps) {
 
     try {
       const formData = new FormData(e.currentTarget)
-      
-      // Ensure profile_image_url is included with the latest value
-      formData.set('profile_image_url', profileImageUrl)
-      
-      console.log('[v0] Submitting profile_image_url:', profileImageUrl)
-      
       await updatePortfolioInfo(formData)
       setMessage('Portfolio updated successfully!')
       router.refresh()
@@ -145,6 +140,8 @@ export function EditPortfolioForm({ portfolioData }: EditPortfolioFormProps) {
             name="profile_image_url"
             currentImage={profileImageUrl}
             onChange={setProfileImageUrl}
+            onUploadingChange={setIsUploading}
+            circularCrop
           />
 
           <div className="grid gap-6 md:grid-cols-2">
@@ -211,11 +208,16 @@ export function EditPortfolioForm({ portfolioData }: EditPortfolioFormProps) {
             </div>
           )}
 
-          <Button type="submit" disabled={isLoading} className="w-full">
+          <Button type="submit" disabled={isLoading || isUploading} className="w-full">
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Saving...
+              </>
+            ) : isUploading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Uploading image...
               </>
             ) : (
               'Save Changes'

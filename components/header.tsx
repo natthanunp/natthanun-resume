@@ -4,7 +4,6 @@ import React from "react"
 
 import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { Button } from './ui/button'
 import { ThemeToggle } from './theme-toggle'
 import { Menu, X } from 'lucide-react'
@@ -12,7 +11,6 @@ import { Menu, X } from 'lucide-react'
 interface HeaderProps {
   portfolioInfo: {
     name: string
-    profile_image_url: string | null
   }
 }
 
@@ -44,20 +42,15 @@ export function Header({ portfolioInfo }: HeaderProps) {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/20 bg-white/70 backdrop-blur-2xl backdrop-saturate-150 dark:border-white/10 dark:bg-white/10">
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/20 bg-white/70 backdrop-blur-2xl backdrop-saturate-150 dark:border-white/10 dark:bg-white/5">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-          {/* Logo/Name with Image */}
+          {/* Logo/Name with Initials */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative h-10 w-10 overflow-hidden rounded-full ring-2 ring-white/20 transition-all group-hover:ring-primary/50 dark:ring-white/10">
-              <Image
-                src={portfolioInfo.profile_image_url || '/images/profile.jpg'}
-                alt={portfolioInfo.name}
-                fill
-                className="object-cover"
-              />
+            <div className="relative h-10 w-10 rounded-full ring-2 ring-white/20 bg-gradient-to-br from-primary via-purple-500 to-pink-500 transition-all group-hover:ring-primary/50 dark:ring-white/10 flex items-center justify-center shadow-lg">
+              <span className="text-lg font-bold text-white">NP</span>
             </div>
-            <span className="hidden text-lg font-semibold sm:block">
-              {portfolioInfo.name}
+            <span className="hidden text-lg font-mono font-semibold sm:block">
+              /natthanunp
             </span>
           </Link>
 
@@ -67,7 +60,7 @@ export function Header({ portfolioInfo }: HeaderProps) {
               <Button
                 key={item.href}
                 variant="ghost"
-                className="rounded-full hover:bg-white/50 dark:hover:bg-white/5"
+                className="rounded-full hover:bg-white/50 dark:hover:bg-white/5 dark:hover:text-blue-400 transition-all duration-300"
                 asChild
               >
                 <a href={item.href} onClick={(e) => handleScroll(e, item.href)}>{item.label}</a>
@@ -100,7 +93,7 @@ export function Header({ portfolioInfo }: HeaderProps) {
                   <Button
                     key={item.href}
                     variant="ghost"
-                    className="w-full justify-start rounded-full hover:bg-white/50 dark:hover:bg-white/5"
+                    className="w-full justify-start rounded-full hover:bg-white/50 dark:hover:bg-white/5 dark:hover:text-blue-400 transition-all duration-300"
                     asChild
                   >
                     <a href={item.href} onClick={(e) => handleScroll(e, item.href)}>{item.label}</a>

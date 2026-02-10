@@ -44,14 +44,14 @@ export async function DogsSection() {
   if (!dogData.length) return null
 
   return (
-    <section id="dogs" className="px-4 py-20">
+    <section id="dogs" className="px-4 pt-20 pb-8">
       <div className="mx-auto max-w-6xl">
         <div className="mb-12 text-center">
-          <h2 className="mb-4 text-4xl font-bold tracking-tight text-balance md:text-5xl">
+          <h2 className="mb-4 text-4xl font-bold tracking-tight text-balance md:text-5xl bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-cyan-300 leading-tight">
             My Furry Co-Pilots
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Paopao the Japanese Spitz and Pepo the Chihuahua bring endless joy to my life. 
+            These guys bring endless joy to my life.
             Double-click to show some love!
           </p>
         </div>

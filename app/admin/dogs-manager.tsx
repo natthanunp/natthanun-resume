@@ -129,6 +129,7 @@ function DogForm({ onCancel, onSuccess }: { onCancel: () => void; onSuccess: () 
           currentImage={imageUrl}
           onChange={setImageUrl}
           required
+          aspectRatio={1}
         />
 
         <div>

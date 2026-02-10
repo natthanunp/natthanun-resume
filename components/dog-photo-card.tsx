@@ -60,7 +60,7 @@ export function DogPhotoCard({
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           onDoubleClick={handleDoubleClick}
         />
-        
+
         {/* Animated heart on double click */}
         {showHeart && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -84,7 +84,7 @@ export function DogPhotoCard({
       </div>
 
       <div className="mt-4">
-        <h3 className="text-2xl font-bold">{name}</h3>
+        <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent dark:from-blue-300 dark:to-cyan-400">{name}</h3>
         {description && (
           <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{description}</p>
         )}

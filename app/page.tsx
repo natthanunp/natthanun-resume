@@ -40,8 +40,15 @@ export default async function Home() {
         {/* Background gradient with mesh effect */}
         <div className="fixed inset-0 -z-20 bg-gradient-to-br from-background via-background to-secondary" />
         <div className="fixed inset-0 -z-10 overflow-hidden">
-          <div className="absolute left-1/4 top-1/4 h-[600px] w-[600px] rounded-full bg-primary/10 blur-[128px] animate-pulse" />
-          <div className="absolute right-1/4 bottom-1/4 h-[600px] w-[600px] rounded-full bg-accent/10 blur-[128px] animate-pulse [animation-delay:2s]" />
+          {/* Primary purple/pink gradient - more vibrant in dark mode */}
+          <div className="absolute left-1/4 top-1/4 h-[600px] w-[600px] rounded-full bg-gradient-to-br from-purple-500/20 via-pink-500/15 to-primary/10 blur-[128px] animate-pulse dark:from-purple-500/40 dark:via-pink-500/30 dark:to-primary/20 dark:blur-[150px]" />
+          {/* Blue/cyan gradient - more vibrant in dark mode */}
+          <div className="absolute right-1/4 bottom-1/4 h-[600px] w-[600px] rounded-full bg-gradient-to-br from-blue-500/20 via-cyan-500/15 to-accent/10 blur-[128px] animate-pulse [animation-delay:2s] dark:from-blue-500/40 dark:via-cyan-500/30 dark:to-accent/20 dark:blur-[150px]" />
+          {/* Additional vibrant accent - more vibrant in dark mode */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full bg-gradient-to-br from-primary/15 via-purple-500/10 to-pink-500/10 blur-[100px] animate-pulse [animation-delay:4s] dark:from-primary/30 dark:via-purple-500/20 dark:to-pink-500/20" />
+          {/* Extra colorful gradients for dark mode */}
+          <div className="absolute left-0 top-1/3 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-fuchsia-500/10 to-rose-500/10 blur-[120px] animate-pulse [animation-delay:1s] dark:from-fuchsia-500/25 dark:to-rose-500/25 dark:opacity-100 opacity-0" />
+          <div className="absolute right-0 bottom-1/3 h-[500px] w-[500px] rounded-full bg-gradient-to-tl from-violet-500/10 to-indigo-500/10 blur-[120px] animate-pulse [animation-delay:3s] dark:from-violet-500/25 dark:to-indigo-500/25 dark:opacity-100 opacity-0" />
         </div>
 
         {/* Hero Section */}
@@ -62,9 +69,9 @@ export default async function Home() {
         <DogsSection />
 
         {/* Footer */}
-        <footer className="border-t border-white/20 bg-white/70 backdrop-blur-2xl backdrop-saturate-150 dark:border-white/10 dark:bg-white/10 px-4 py-8 mt-20">
+        <footer className="border-t border-white/20 bg-white/70 backdrop-blur-2xl backdrop-saturate-150 dark:border-white/10 dark:bg-white/10 px-4 py-8 mt-8">
           <div className="mx-auto max-w-4xl text-center text-sm text-muted-foreground">
-            <p>© 2024 {portfolioData.name}. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} {portfolioData.name}. All rights reserved.</p>
           </div>
         </footer>
       </main>
