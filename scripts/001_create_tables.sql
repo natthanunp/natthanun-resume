@@ -9,6 +9,7 @@ create table if not exists public.portfolio_info (
   location text not null default 'Bangkok / Thailand',
   github_url text,
   linkedin_url text,
+  profile_image_url text default '/images/profile.jpg',
   years_experience integer default 6,
   projects_delivered integer default 10,
   updated_at timestamp with time zone default now()
