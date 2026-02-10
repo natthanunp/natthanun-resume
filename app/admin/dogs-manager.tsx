@@ -7,6 +7,7 @@ import { GlassCard } from '@/components/glass-card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { ImageUpload } from '@/components/image-upload'
 import { Plus, Trash2, Loader2 } from 'lucide-react'
 import { addDog, deleteDog } from './actions'
 import { useRouter } from 'next/navigation'
@@ -96,6 +97,7 @@ export function DogsManager({ dogs }: { dogs: Dog[] }) {
 
 function DogForm({ onCancel, onSuccess }: { onCancel: () => void; onSuccess: () => void }) {
   const [isLoading, setIsLoading] = useState(false)
+  const [imageUrl, setImageUrl] = useState('')
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -121,13 +123,13 @@ function DogForm({ onCancel, onSuccess }: { onCancel: () => void; onSuccess: () 
           <Input id="name" name="name" placeholder="Paopao" required />
         </div>
 
-        <div>
-          <Label htmlFor="image_url">Image URL</Label>
-          <Input id="image_url" name="image_url" placeholder="/images/paopao.jpg" required />
-          <p className="text-xs text-muted-foreground mt-1">
-            Upload your image to /public/images/ first, then use the path here
-          </p>
-        </div>
+        <ImageUpload
+          label="Dog Photo"
+          name="image_url"
+          currentImage={imageUrl}
+          onChange={setImageUrl}
+          required
+        />
 
         <div>
           <Label htmlFor="description">Description (optional)</Label>
@@ -135,7 +137,7 @@ function DogForm({ onCancel, onSuccess }: { onCancel: () => void; onSuccess: () 
         </div>
 
         <div className="flex gap-2">
-          <Button type="submit" disabled={isLoading} className="flex-1">
+          <Button type="submit" disabled={isLoading || !imageUrl} className="flex-1">
             {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
             Add Dog Picture
           </Button>

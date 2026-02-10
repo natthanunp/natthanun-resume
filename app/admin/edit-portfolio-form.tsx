@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { ImageUpload } from '@/components/image-upload'
 import { updatePortfolioInfo } from './actions'
 import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
@@ -21,6 +22,7 @@ interface EditPortfolioFormProps {
     location: string
     github_url: string | null
     linkedin_url: string | null
+    profile_image_url: string | null
     years_experience: number
     projects_delivered: number
   }
@@ -30,6 +32,9 @@ export function EditPortfolioForm({ portfolioData }: EditPortfolioFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const [profileImageUrl, setProfileImageUrl] = useState(
+    portfolioData.profile_image_url || '/images/profile.jpg'
+  )
 
   const handleSubmit = async (formData: FormData) => {
     setIsLoading(true)
@@ -125,18 +130,12 @@ export function EditPortfolioForm({ portfolioData }: EditPortfolioFormProps) {
             </div>
           </div>
 
-          <div>
-            <Label htmlFor="profile_image_url">Profile Image URL</Label>
-            <Input
-              id="profile_image_url"
-              name="profile_image_url"
-              defaultValue={portfolioData.profile_image_url || '/images/profile.jpg'}
-              className="mt-2"
-            />
-            <p className="text-xs text-muted-foreground mt-1">
-              Upload your image to /public/images/ first, then use the path here
-            </p>
-          </div>
+          <ImageUpload
+            label="Profile Image"
+            name="profile_image_url"
+            currentImage={profileImageUrl}
+            onChange={setProfileImageUrl}
+          />
 
           <div className="grid gap-6 md:grid-cols-2">
             <div>
