@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
 import Link from 'next/link'
 import { ArrowLeft, LogOut } from 'lucide-react'
-import { EditPortfolioForm } from './edit-portfolio-form'
+import { AdminTabs } from './admin-tabs'
 
 export default async function AdminPage() {
   const supabase = await createClient()
@@ -18,11 +18,26 @@ export default async function AdminPage() {
     redirect('/auth/login')
   }
 
-  // Fetch portfolio info
+  // Fetch all data
   const { data: portfolioData } = await supabase
     .from('portfolio_info')
     .select('*')
     .single()
+
+  const { data: experiences } = await supabase
+    .from('work_experience')
+    .select('*')
+    .order('order_index', { ascending: true })
+
+  const { data: skills } = await supabase
+    .from('skills')
+    .select('*')
+    .order('order_index', { ascending: true })
+
+  const { data: dogs } = await supabase
+    .from('dog_pictures')
+    .select('*')
+    .order('order_index', { ascending: true })
 
   if (!portfolioData) {
     return <div>Loading...</div>
@@ -34,11 +49,11 @@ export default async function AdminPage() {
       <div className="fixed inset-0 -z-20 bg-gradient-to-br from-background via-background to-muted" />
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-white/40 backdrop-blur-xl dark:bg-white/5">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-white/70 backdrop-blur-2xl backdrop-saturate-150 dark:bg-white/10">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
           <Button
             variant="ghost"
-            className="rounded-full bg-white/40 backdrop-blur-xl dark:bg-white/5"
+            className="rounded-full hover:bg-white/50 dark:hover:bg-white/5"
             asChild
           >
             <Link href="/">
@@ -52,7 +67,7 @@ export default async function AdminPage() {
               <Button
                 type="submit"
                 variant="ghost"
-                className="rounded-full bg-white/40 backdrop-blur-xl dark:bg-white/5"
+                className="rounded-full hover:bg-white/50 dark:hover:bg-white/5"
               >
                 <LogOut className="h-5 w-5 mr-2" />
                 Logout
@@ -65,17 +80,22 @@ export default async function AdminPage() {
 
       {/* Content */}
       <div className="px-4 py-24">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <div className="mb-8">
-            <h1 className="mb-2 text-4xl font-bold tracking-tight md:text-5xl">
+            <h1 className="mb-2 text-4xl font-bold tracking-tight text-balance md:text-5xl">
               Admin Dashboard
             </h1>
             <p className="text-muted-foreground">
-              Edit your portfolio information below
+              Manage your portfolio content
             </p>
           </div>
 
-          <EditPortfolioForm portfolioData={portfolioData} />
+          <AdminTabs
+            portfolioData={portfolioData}
+            experiences={experiences || []}
+            skills={skills || []}
+            dogs={dogs || []}
+          />
         </div>
       </div>
     </main>

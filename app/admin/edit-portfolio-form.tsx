@@ -125,6 +125,19 @@ export function EditPortfolioForm({ portfolioData }: EditPortfolioFormProps) {
             </div>
           </div>
 
+          <div>
+            <Label htmlFor="profile_image_url">Profile Image URL</Label>
+            <Input
+              id="profile_image_url"
+              name="profile_image_url"
+              defaultValue={portfolioData.profile_image_url || '/images/profile.jpg'}
+              className="mt-2"
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              Upload your image to /public/images/ first, then use the path here
+            </p>
+          </div>
+
           <div className="grid gap-6 md:grid-cols-2">
             <div>
               <Label htmlFor="github_url">GitHub URL</Label>
