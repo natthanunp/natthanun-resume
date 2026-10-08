@@ -138,6 +138,54 @@ export async function updateExperience(id: string, formData: FormData) {
   revalidatePath('/admin')
 }
 
+export async function reorderExperiences(ids: string[]) {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    throw new Error('Unauthorized')
+  }
+
+  if (!Array.isArray(ids) || ids.some((id) => typeof id !== 'string')) {
+    throw new Error('Invalid experience order')
+  }
+
+  const { data: experiences, error: fetchError } = await supabase
+    .from('work_experience')
+    .select('id')
+
+  if (fetchError) {
+    throw fetchError
+  }
+
+  const currentExperiences = experiences ?? []
+  const submittedIds = new Set(ids)
+  if (
+    submittedIds.size !== ids.length ||
+    currentExperiences.length !== ids.length ||
+    currentExperiences.some(({ id }) => !submittedIds.has(id))
+  ) {
+    throw new Error('Experience list changed. Refresh and try again.')
+  }
+
+  for (const [order_index, id] of ids.entries()) {
+    const { error } = await supabase
+      .from('work_experience')
+      .update({ order_index })
+      .eq('id', id)
+
+    if (error) {
+      throw error
+    }
+  }
+
+  revalidatePath('/')
+  revalidatePath('/admin')
+}
+
 export async function deleteExperience(id: string) {
   const supabase = await createClient()
 
