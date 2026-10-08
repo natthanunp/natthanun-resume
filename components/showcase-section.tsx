@@ -7,7 +7,7 @@ export function ShowcaseSection() {
   return (
     <section id="showcase" className="section-space showcase-section" aria-labelledby="showcase-title">
       <div className="site-container">
-        <div className="section-heading section-heading-inline"><div><p className="eyebrow">04 / Selected work</p><h2 id="showcase-title">A little curiosity.<br /><span className="text-muted-foreground">A whole new universe.</span></h2></div><p className="section-aside">An idea brought to life.<br />Made to be explored.</p></div>
+        <div className="section-heading section-heading-inline"><div><p className="eyebrow">05 / Selected work</p><h2 id="showcase-title">A little curiosity.<br /><span className="text-muted-foreground">A whole new universe.</span></h2></div><p className="section-aside">An idea brought to life.<br />Made to be explored.</p></div>
         <article className="project-card liquid-glass">
           <a className="project-preview" href={projectUrl} target="_blank" rel="noopener noreferrer" aria-label="Explore Galaxique (opens in a new tab)">
             <Image src="/images/galaxique-homepage.png" alt="Screenshot of the real Galaxique homepage, showing its personality quiz introduction and interactive galaxy" width={1440} height={1000} sizes="(max-width: 900px) calc(100vw - 60px), (max-width: 1440px) calc(100vw - 120px), 1320px" className="project-screenshot" />

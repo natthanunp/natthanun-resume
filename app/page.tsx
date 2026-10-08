@@ -5,14 +5,16 @@ import { HeroSection } from '@/components/hero-section'
 import { AboutSection } from '@/components/about-section'
 import { ShowcaseSection } from '@/components/showcase-section'
 import { ExperienceSection } from '@/components/experience-section'
+import { AchievementsSection } from '@/components/achievements-section'
 import { SkillsSection } from '@/components/skills-section'
 import { DogsSection } from '@/components/dogs-section'
 
 export default async function Home() {
   const supabase = await createClient()
-  const [{ data: portfolioData }, { data: experiences }, { data: skills }] = await Promise.all([
+  const [{ data: portfolioData }, { data: experiences }, { data: achievements }, { data: skills }] = await Promise.all([
     supabase.from('portfolio_info').select('*').single(),
     supabase.from('work_experience').select('*').order('order_index', { ascending: true }),
+    supabase.from('achievements').select('*').order('order_index', { ascending: true }).order('created_at', { ascending: true }).order('id', { ascending: true }),
     supabase.from('skills').select('*').order('order_index', { ascending: true }),
   ])
 
@@ -23,11 +25,12 @@ export default async function Home() {
   return (
     <>
       <a href="#main-content" className="skip-link">Skip to content</a>
-      <Header portfolioInfo={{ name: portfolioData.name }} hasExperience={!!experiences?.length} hasSkills={!!skills?.length} />
+      <Header portfolioInfo={{ name: portfolioData.name }} hasExperience={!!experiences?.length} hasAchievements={!!achievements?.length} hasSkills={!!skills?.length} />
       <main id="main-content" className="portfolio-main">
         <HeroSection portfolioInfo={portfolioData} />
         <AboutSection aboutText={portfolioData.about} />
         {!!experiences?.length && <ExperienceSection experiences={experiences} />}
+        <AchievementsSection achievements={achievements ?? []} />
         {!!skills?.length && <SkillsSection skills={skills} />}
         <ShowcaseSection />
         <DogsSection />

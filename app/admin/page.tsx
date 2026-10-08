@@ -18,26 +18,13 @@ export default async function AdminPage() {
     redirect('/auth/login')
   }
 
-  // Fetch all data
-  const { data: portfolioData } = await supabase
-    .from('portfolio_info')
-    .select('*')
-    .single()
-
-  const { data: experiences } = await supabase
-    .from('work_experience')
-    .select('*')
-    .order('order_index', { ascending: true })
-
-  const { data: skills } = await supabase
-    .from('skills')
-    .select('*')
-    .order('order_index', { ascending: true })
-
-  const { data: dogs } = await supabase
-    .from('dog_pictures')
-    .select('*')
-    .order('order_index', { ascending: true })
+  const [{ data: portfolioData }, { data: experiences }, { data: achievements, error: achievementsError }, { data: skills }, { data: dogs }] = await Promise.all([
+    supabase.from('portfolio_info').select('*').single(),
+    supabase.from('work_experience').select('*').order('order_index', { ascending: true }),
+    supabase.from('achievements').select('*').order('order_index', { ascending: true }).order('created_at', { ascending: true }).order('id', { ascending: true }),
+    supabase.from('skills').select('*').order('order_index', { ascending: true }),
+    supabase.from('dog_pictures').select('*').order('order_index', { ascending: true }),
+  ])
 
   if (!portfolioData) {
     return <div>Loading...</div>
@@ -93,6 +80,8 @@ export default async function AdminPage() {
           <AdminTabs
             portfolioData={portfolioData}
             experiences={experiences || []}
+            achievements={achievements ?? []}
+            achievementsError={Boolean(achievementsError)}
             skills={skills || []}
             dogs={dogs || []}
           />

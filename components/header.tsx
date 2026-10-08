@@ -8,16 +8,18 @@ import { ThemeToggle } from './theme-toggle'
 interface HeaderProps {
   portfolioInfo: { name: string }
   hasExperience?: boolean
+  hasAchievements?: boolean
   hasSkills?: boolean
 }
 
-export function Header({ portfolioInfo, hasExperience = true, hasSkills = true }: HeaderProps) {
+export function Header({ portfolioInfo, hasExperience = true, hasAchievements = false, hasSkills = true }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('')
   const initials = portfolioInfo.name.split(' ').map((part) => part[0]).slice(0, 2).join('')
   const navItems = [
     { href: '#about', label: 'About' },
     ...(hasExperience ? [{ href: '#experience', label: 'Experience' }] : []),
+    ...(hasAchievements ? [{ href: '#achievements', label: 'Recognition' }] : []),
     ...(hasSkills ? [{ href: '#skills', label: 'Skills' }] : []),
     { href: '#showcase', label: 'Showcase' },
   ]

@@ -45,3 +45,9 @@ From the admin dashboard (`/admin`), you can:
 - Change experience stats
 
 All changes are saved directly to your Supabase database.
+
+## Achievements & Recognition
+
+Apply `scripts/005_add_achievements.sql` to your Supabase database when setting up this feature on a new project. It creates the achievements table, public read access, authenticated editing policies, atomic reordering, and the two original community highlights. The migration can be rerun without duplicating or overwriting entries.
+
+Open `/admin` → **Achievements** to add, edit, reorder with the arrow buttons, or delete entries. Each entry has a title, category, and description, plus an optional event month and link. Saved changes appear immediately on the portfolio after the role experience section. The section and its navigation link are hidden when there are no achievements.

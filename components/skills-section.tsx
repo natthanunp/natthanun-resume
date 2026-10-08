@@ -18,7 +18,7 @@ export function SkillsSection({ skills }: { skills: Skill[] }) {
   return (
     <section id="skills" className="section-space skills-section" aria-labelledby="skills-title">
       <div className="site-container">
-        <div className="section-heading section-heading-inline"><div><p className="eyebrow">03 / My toolkit</p><h2 id="skills-title">The right tools.<br /><span className="text-muted-foreground">For the right idea.</span></h2></div><p className="section-aside">Across screens, systems,<br />and everything in between.</p></div>
+        <div className="section-heading section-heading-inline"><div><p className="eyebrow">04 / My toolkit</p><h2 id="skills-title">The right tools.<br /><span className="text-muted-foreground">For the right idea.</span></h2></div><p className="section-aside">Across screens, systems,<br />and everything in between.</p></div>
         <div className="skills-grid">{Object.entries(groupedSkills).map(([category, categorySkills]) => <GlassCard key={category} className="skill-card"><span className="skill-icon"><CategoryIcon category={category} /></span><h3>{category}</h3><div className="skill-tags">{categorySkills.map((skill) => <span key={skill.id}>{skill.name}</span>)}</div></GlassCard>)}</div>
       </div>
     </section>

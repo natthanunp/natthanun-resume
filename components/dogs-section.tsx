@@ -41,7 +41,7 @@ export async function DogsSection() {
     <section id="dogs" className="section-space dogs-section" aria-labelledby="dogs-title">
       <div className="site-container">
         <div className="section-heading section-heading-inline">
-          <div><p className="eyebrow">05 / Life beyond the screen</p><h2 id="dogs-title">My favorite<br /><span className="text-muted-foreground">co-pilots.</span></h2></div>
+          <div><p className="eyebrow">06 / Life beyond the screen</p><h2 id="dogs-title">My favorite<br /><span className="text-muted-foreground">co-pilots.</span></h2></div>
           <p className="section-aside">A little less code.<br />A lot more joy.</p>
         </div>
 
