@@ -1,52 +1,25 @@
+import { Cloud, Code2, FlaskConical, Layers3, LineChart, Smartphone } from 'lucide-react'
 import { GlassCard } from './glass-card'
 
-interface Skill {
-  id: string
-  category: string
-  name: string
-  order_index: number
+interface Skill { id: string; category: string; name: string; order_index: number }
+
+function CategoryIcon({ category }: { category: string }) {
+  const name = category.toLowerCase()
+  const Icon = name.includes('mobile') ? Smartphone : name.includes('cloud') || name.includes('devops') ? Cloud : name.includes('test') || name.includes('quality') ? FlaskConical : name.includes('analytic') || name.includes('tool') ? LineChart : name.includes('back') ? Layers3 : Code2
+  return <Icon size={22} strokeWidth={1.5} aria-hidden="true" />
 }
 
-interface SkillsSectionProps {
-  skills: Skill[]
-}
-
-export function SkillsSection({ skills }: SkillsSectionProps) {
-  // Group skills by category
-  const groupedSkills = skills.reduce(
-    (acc, skill) => {
-      if (!acc[skill.category]) {
-        acc[skill.category] = []
-      }
-      acc[skill.category].push(skill)
-      return acc
-    },
-    {} as Record<string, Skill[]>
-  )
+export function SkillsSection({ skills }: { skills: Skill[] }) {
+  const groupedSkills = skills.reduce((groups, skill) => {
+    (groups[skill.category] ??= []).push(skill)
+    return groups
+  }, {} as Record<string, Skill[]>)
 
   return (
-    <section id="skills" className="px-4 py-20">
-      <div className="mx-auto max-w-4xl">
-        <h2 className="mb-12 text-center text-4xl font-bold tracking-tight text-balance md:text-5xl bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-cyan-300">
-          Skills & Expertise
-        </h2>
-        <div className="grid gap-6 md:grid-cols-2">
-          {Object.entries(groupedSkills).map(([category, categorySkills]) => (
-            <GlassCard key={category}>
-              <h3 className="mb-4 text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent dark:from-blue-300 dark:to-cyan-400">{category}</h3>
-              <div className="flex flex-wrap gap-2">
-                {categorySkills.map((skill) => (
-                  <span
-                    key={skill.id}
-                    className="rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-all duration-300 hover:bg-primary/20 hover:scale-105 hover:shadow-lg dark:bg-blue-500/15 dark:text-blue-300 dark:hover:bg-blue-500/25"
-                  >
-                    {skill.name}
-                  </span>
-                ))}
-              </div>
-            </GlassCard>
-          ))}
-        </div>
+    <section id="skills" className="section-space skills-section" aria-labelledby="skills-title">
+      <div className="site-container">
+        <div className="section-heading section-heading-inline"><div><p className="eyebrow">03 / My toolkit</p><h2 id="skills-title">The right tools.<br /><span className="text-muted-foreground">For the right idea.</span></h2></div><p className="section-aside">Across screens, systems,<br />and everything in between.</p></div>
+        <div className="skills-grid">{Object.entries(groupedSkills).map(([category, categorySkills]) => <GlassCard key={category} className="skill-card"><span className="skill-icon"><CategoryIcon category={category} /></span><h3>{category}</h3><div className="skill-tags">{categorySkills.map((skill) => <span key={skill.id}>{skill.name}</span>)}</div></GlassCard>)}</div>
       </div>
     </section>
   )

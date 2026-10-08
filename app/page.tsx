@@ -1,80 +1,41 @@
+import { ArrowUpRight, Github, Linkedin, Mail } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { Header } from '@/components/header'
 import { HeroSection } from '@/components/hero-section'
 import { AboutSection } from '@/components/about-section'
+import { ShowcaseSection } from '@/components/showcase-section'
 import { ExperienceSection } from '@/components/experience-section'
 import { SkillsSection } from '@/components/skills-section'
 import { DogsSection } from '@/components/dogs-section'
 
 export default async function Home() {
   const supabase = await createClient()
-
-  // Fetch portfolio info
-  const { data: portfolioData } = await supabase
-    .from('portfolio_info')
-    .select('*')
-    .single()
-
-  // Fetch work experience
-  const { data: experiences } = await supabase
-    .from('work_experience')
-    .select('*')
-    .order('order_index', { ascending: true })
-
-  // Fetch skills
-  const { data: skills } = await supabase
-    .from('skills')
-    .select('*')
-    .order('order_index', { ascending: true })
+  const [{ data: portfolioData }, { data: experiences }, { data: skills }] = await Promise.all([
+    supabase.from('portfolio_info').select('*').single(),
+    supabase.from('work_experience').select('*').order('order_index', { ascending: true }),
+    supabase.from('skills').select('*').order('order_index', { ascending: true }),
+  ])
 
   if (!portfolioData) {
-    return <div>Loading...</div>
+    return <main className="site-container error-state"><p className="eyebrow">A brief intermission</p><h1>The portfolio will be right back.</h1><p>Something interrupted the connection. Please try again in a moment.</p><a href="/" className="button-primary">Try again <ArrowUpRight size={16} aria-hidden="true" /></a></main>
   }
 
   return (
     <>
-      {/* Header */}
-      <Header portfolioInfo={portfolioData} />
-
-      <main className="relative min-h-screen">
-        {/* Background gradient with mesh effect */}
-        <div className="fixed inset-0 -z-20 bg-gradient-to-br from-background via-background to-secondary" />
-        <div className="fixed inset-0 -z-10 overflow-hidden">
-          {/* Primary purple/pink gradient - more vibrant in dark mode */}
-          <div className="absolute left-1/4 top-1/4 h-[600px] w-[600px] rounded-full bg-gradient-to-br from-purple-500/20 via-pink-500/15 to-primary/10 blur-[128px] animate-pulse dark:from-purple-500/40 dark:via-pink-500/30 dark:to-primary/20 dark:blur-[150px]" />
-          {/* Blue/cyan gradient - more vibrant in dark mode */}
-          <div className="absolute right-1/4 bottom-1/4 h-[600px] w-[600px] rounded-full bg-gradient-to-br from-blue-500/20 via-cyan-500/15 to-accent/10 blur-[128px] animate-pulse [animation-delay:2s] dark:from-blue-500/40 dark:via-cyan-500/30 dark:to-accent/20 dark:blur-[150px]" />
-          {/* Additional vibrant accent - more vibrant in dark mode */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full bg-gradient-to-br from-primary/15 via-purple-500/10 to-pink-500/10 blur-[100px] animate-pulse [animation-delay:4s] dark:from-primary/30 dark:via-purple-500/20 dark:to-pink-500/20" />
-          {/* Extra colorful gradients for dark mode */}
-          <div className="absolute left-0 top-1/3 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-fuchsia-500/10 to-rose-500/10 blur-[120px] animate-pulse [animation-delay:1s] dark:from-fuchsia-500/25 dark:to-rose-500/25 dark:opacity-100 opacity-0" />
-          <div className="absolute right-0 bottom-1/3 h-[500px] w-[500px] rounded-full bg-gradient-to-tl from-violet-500/10 to-indigo-500/10 blur-[120px] animate-pulse [animation-delay:3s] dark:from-violet-500/25 dark:to-indigo-500/25 dark:opacity-100 opacity-0" />
-        </div>
-
-        {/* Hero Section */}
+      <a href="#main-content" className="skip-link">Skip to content</a>
+      <Header portfolioInfo={{ name: portfolioData.name }} hasExperience={!!experiences?.length} hasSkills={!!skills?.length} />
+      <main id="main-content" className="portfolio-main">
         <HeroSection portfolioInfo={portfolioData} />
-
-        {/* About Section */}
         <AboutSection aboutText={portfolioData.about} />
-
-        {/* Experience Section */}
-        {experiences && experiences.length > 0 && (
-          <ExperienceSection experiences={experiences} />
-        )}
-
-        {/* Skills Section */}
-        {skills && skills.length > 0 && <SkillsSection skills={skills} />}
-
-        {/* Dogs Section */}
+        {!!experiences?.length && <ExperienceSection experiences={experiences} />}
+        {!!skills?.length && <SkillsSection skills={skills} />}
+        <ShowcaseSection />
         <DogsSection />
-
-        {/* Footer */}
-        <footer className="border-t border-white/20 bg-white/70 backdrop-blur-2xl backdrop-saturate-150 dark:border-white/10 dark:bg-white/10 px-4 py-8 mt-8">
-          <div className="mx-auto max-w-4xl text-center text-sm text-muted-foreground">
-            <p>© {new Date().getFullYear()} {portfolioData.name}. All rights reserved.</p>
-          </div>
-        </footer>
+        <section id="contact" className="section-space contact-section" aria-labelledby="contact-title">
+          <div className="site-container"><div className="contact-card liquid-glass"><div className="contact-haze" aria-hidden="true" /><p className="eyebrow">Good things start with a conversation</p><h2 id="contact-title">Have something<br /><span className="text-muted-foreground">in mind?</span></h2><p className="contact-description">An interesting idea, a new opportunity, or just a hello.<br />I’d love to hear from you.</p><a href={`mailto:${portfolioData.email}`} className="button-primary">Let’s make it happen <ArrowUpRight size={18} aria-hidden="true" /></a><a href={`mailto:${portfolioData.email}`} className="contact-email"><Mail size={14} aria-hidden="true" />{portfolioData.email}</a></div></div>
+        </section>
       </main>
+      <footer className="site-footer site-container"><div><a href="#hero" className="footer-name">{portfolioData.name}<span className="brand-dot">.</span></a><p>Thoughtfully built. Always evolving.</p></div><div className="footer-right"><div className="footer-socials">{portfolioData.github_url && <a href={portfolioData.github_url} target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)"><Github size={17} /></a>}{portfolioData.linkedin_url && <a href={portfolioData.linkedin_url} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><Linkedin size={17} /></a>}<a href={`mailto:${portfolioData.email}`} aria-label="Send an email"><Mail size={17} /></a></div><p>© {new Date().getFullYear()} {portfolioData.name}</p></div></footer>
     </>
   )
 }

@@ -1,20 +1,8 @@
 import React from "react"
 import type { Metadata } from 'next'
-import { Inter, Space_Mono } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 
 import './globals.css'
-
-const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-inter',
-})
-
-const spaceMono = Space_Mono({ 
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-space-mono',
-})
 
 export const metadata: Metadata = {
   title: 'Natthanun Puntanee - Software Engineer',
@@ -32,7 +20,7 @@ export default function RootLayout({
         {/* Tell Dark Reader and similar extensions to not modify this site */}
         <meta name="darkreader-lock" />
       </head>
-      <body className={`${inter.variable} ${spaceMono.variable} font-sans antialiased`}>
+      <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

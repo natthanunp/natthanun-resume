@@ -106,7 +106,7 @@ export function DogPhotoCard({
   }
 
   return (
-    <GlassCard className="group overflow-hidden">
+    <GlassCard className="group overflow-hidden dog-card">
       <div className="relative aspect-square overflow-hidden rounded-2xl">
         <Image
           src={imageUrl || "/placeholder.svg"}
@@ -139,7 +139,7 @@ export function DogPhotoCard({
       </div>
 
       <div className="mt-4">
-        <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent dark:from-blue-300 dark:to-cyan-400">{name}</h3>
+        <h3 className="text-xl font-semibold tracking-tight">{name}</h3>
         {description && (
           <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{description}</p>
         )}

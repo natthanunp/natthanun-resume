@@ -1,6 +1,4 @@
-import { GlassCard } from './glass-card'
-import { Github, Linkedin, Mail, MapPin } from 'lucide-react'
-import { Button } from './ui/button'
+import { ArrowDown, ArrowUpRight, Github, Linkedin, MapPin } from 'lucide-react'
 import Image from 'next/image'
 
 interface HeroSectionProps {
@@ -20,107 +18,42 @@ interface HeroSectionProps {
 
 export function HeroSection({ portfolioInfo }: HeroSectionProps) {
   return (
-    <section id="hero" className="relative flex min-h-[calc(100vh-65px)] items-center justify-center px-4 py-20 overflow-hidden">
-
-      <div className="mx-auto max-w-4xl w-full relative z-10">
-        <GlassCard className="text-center">
-          <div className="mb-8">
-            {portfolioInfo.profile_image_url && (
-              <div className="relative mb-6 mx-auto w-40 h-40 rounded-full overflow-hidden border-4 border-primary/20 shadow-xl dark:border-blue-400/30">
-                <Image
-                  src={portfolioInfo.profile_image_url}
-                  alt={portfolioInfo.name}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            )}
-            <h1 className="mb-2 text-5xl font-bold tracking-tight text-balance md:text-6xl lg:text-7xl bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-cyan-300">
-              {portfolioInfo.name}
-            </h1>
-            <p className="text-2xl font-semibold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent md:text-3xl dark:from-blue-400 dark:to-cyan-300">
-              {portfolioInfo.title}
-            </p>
+    <section id="hero" className="hero-section" aria-labelledby="hero-title">
+      <div className="hero-haze" aria-hidden="true" />
+      <div className="site-container hero-grid">
+        <div className="hero-copy entrance">
+          <p className="eyebrow hero-eyebrow"><span className="status-dot" />{portfolioInfo.title}</p>
+          <p className="hero-intro">Hi, I’m {portfolioInfo.name.split(' ')[0]}.</p>
+          <h1 id="hero-title">Thoughtful code.<br /><span className="hero-heading-muted">Real-world impact.</span></h1>
+          <p className="hero-description">{portfolioInfo.tagline}</p>
+          <div className="hero-buttons">
+            <a href="#showcase" className="button-primary">Explore my work <ArrowDown size={17} aria-hidden="true" /></a>
+            <a href={`mailto:${portfolioInfo.email}`} className="button-glass liquid-glass">Get in touch <ArrowUpRight size={17} aria-hidden="true" /></a>
           </div>
-
-          <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground leading-relaxed">
-            {portfolioInfo.tagline}
-          </p>
-
-          <div className="mb-8 flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
-              <span>{portfolioInfo.location}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Mail className="h-4 w-4" />
-              <a
-                href={`mailto:${portfolioInfo.email}`}
-                className="hover:text-primary transition-colors"
-              >
-                {portfolioInfo.email}
-              </a>
-            </div>
+          <div className="hero-location"><MapPin size={14} aria-hidden="true" /><span>{portfolioInfo.location}</span><span className="small-divider" /><span>Building for the world</span></div>
+        </div>
+        <div className="hero-art entrance entrance-delay">
+          <div className="glass-orbit orbit-one" aria-hidden="true" />
+          <div className="glass-orbit orbit-two" aria-hidden="true" />
+          <div className="portrait-frame liquid-glass">
+            <div className="portrait-image"><Image src={portfolioInfo.profile_image_url || '/images/profile.jpg'} alt={portfolioInfo.name} fill sizes="(max-width: 900px) 280px, (max-width: 1050px) 300px, 380px" className="object-cover" priority /></div>
+            <div className="portrait-caption"><span>{portfolioInfo.name}</span><span>{portfolioInfo.title}</span></div>
           </div>
-
-          <div className="flex items-center justify-center gap-3">
-            {portfolioInfo.github_url && (
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full border-white/20 bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-xl dark:border-white/10 dark:from-white/10 dark:to-white/5 hover:from-purple-500/20 hover:to-pink-500/20 dark:hover:from-purple-500/30 dark:hover:to-pink-500/30 transition-all duration-300"
-                asChild
-              >
-                <a
-                  href={portfolioInfo.github_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Github className="h-5 w-5" />
-                  <span className="sr-only">GitHub</span>
-                </a>
-              </Button>
-            )}
-            {portfolioInfo.linkedin_url && (
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full border-white/20 bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-xl dark:border-white/10 dark:from-white/10 dark:to-white/5 hover:from-blue-500/20 hover:to-cyan-500/20 dark:hover:from-blue-500/30 dark:hover:to-cyan-500/30 transition-all duration-300"
-                asChild
-              >
-                <a
-                  href={portfolioInfo.linkedin_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Linkedin className="h-5 w-5" />
-                  <span className="sr-only">LinkedIn</span>
-                </a>
-              </Button>
-            )}
+          <div className="floating-note floating-note-top liquid-glass" aria-hidden="true"><span className="note-symbol">&lt;/&gt;</span><span>Built with care.<br /><strong>Down to the details.</strong></span></div>
+          <div className="floating-note floating-note-bottom liquid-glass"><span className="note-spark" aria-hidden="true">✦</span><span>Engineer by craft.<br /><strong>Curious by nature.</strong></span></div>
+        </div>
+        <div className="hero-bottom entrance entrance-delay">
+          <div className="hero-stats">
+            <div className="hero-stat"><strong>{portfolioInfo.years_experience}<span>+</span></strong><span>Years of experience</span></div>
+            <div className="hero-stat"><strong>{portfolioInfo.projects_delivered}<span>+</span></strong><span>Projects delivered</span></div>
           </div>
-
-          <div className="mt-12 grid grid-cols-2 gap-6 border-t border-white/20 pt-8 dark:border-white/10">
-            <div className="group">
-              <div className="text-4xl font-bold bg-gradient-to-br from-primary to-blue-600 bg-clip-text text-transparent group-hover:from-blue-500 group-hover:to-cyan-600 transition-all duration-300 dark:from-blue-300 dark:to-cyan-400">
-                {portfolioInfo.years_experience}+
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Years Experience
-              </div>
-            </div>
-            <div className="group">
-              <div className="text-4xl font-bold bg-gradient-to-br from-primary to-cyan-600 bg-clip-text text-transparent group-hover:from-cyan-500 group-hover:to-teal-600 transition-all duration-300 dark:from-cyan-300 dark:to-teal-400">
-                {portfolioInfo.projects_delivered}+
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Projects Delivered
-              </div>
-            </div>
+          <div className="hero-socials">
+            {portfolioInfo.github_url && <a href={portfolioInfo.github_url} target="_blank" rel="noopener noreferrer" className="social-link" aria-label="GitHub (opens in a new tab)"><Github size={19} /><span>GitHub</span><ArrowUpRight size={13} aria-hidden="true" /></a>}
+            {portfolioInfo.linkedin_url && <a href={portfolioInfo.linkedin_url} target="_blank" rel="noopener noreferrer" className="social-link" aria-label="LinkedIn (opens in a new tab)"><Linkedin size={19} /><span>LinkedIn</span><ArrowUpRight size={13} aria-hidden="true" /></a>}
           </div>
-        </GlassCard>
+        </div>
       </div>
+      <a href="#about" className="scroll-cue"><span>A little more about me</span><ArrowDown size={14} aria-hidden="true" /></a>
     </section>
   )
 }

@@ -17,16 +17,10 @@ export async function DogsSection() {
   const supabase = await createClient()
   const sessionId = await getSessionId()
 
-  // Fetch dog pictures
-  const { data: dogPictures } = await supabase
-    .from('dog_pictures')
-    .select('*')
-    .order('order_index', { ascending: true })
-
-  // Fetch all likes
-  const { data: allLikes } = await supabase
-    .from('dog_likes')
-    .select('dog_picture_id, session_id')
+  const [{ data: dogPictures }, { data: allLikes }] = await Promise.all([
+    supabase.from('dog_pictures').select('*').order('order_index', { ascending: true }),
+    supabase.from('dog_likes').select('dog_picture_id, session_id'),
+  ])
 
   // Count likes per dog and check if current session liked
   const dogData = dogPictures?.map((dog) => {
@@ -44,19 +38,14 @@ export async function DogsSection() {
   if (!dogData.length) return null
 
   return (
-    <section id="dogs" className="px-4 pt-20 pb-8">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-12 text-center">
-          <h2 className="mb-4 text-4xl font-bold tracking-tight text-balance md:text-5xl bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-cyan-300 leading-tight">
-            My Furry Co-Pilots
-          </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            These guys bring endless joy to my life.
-            Double-click to show some love!
-          </p>
+    <section id="dogs" className="section-space dogs-section" aria-labelledby="dogs-title">
+      <div className="site-container">
+        <div className="section-heading section-heading-inline">
+          <div><p className="eyebrow">05 / Life beyond the screen</p><h2 id="dogs-title">My favorite<br /><span className="text-muted-foreground">co-pilots.</span></h2></div>
+          <p className="section-aside">A little less code.<br />A lot more joy.</p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="dogs-grid">
           {dogData.map((dog) => (
             <DogPhotoCard
               key={dog.id}

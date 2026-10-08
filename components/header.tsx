@@ -1,112 +1,73 @@
 'use client'
 
-import React from "react"
-
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Button } from './ui/button'
+import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { ThemeToggle } from './theme-toggle'
-import { Menu, X } from 'lucide-react'
 
 interface HeaderProps {
-  portfolioInfo: {
-    name: string
-  }
+  portfolioInfo: { name: string }
+  hasExperience?: boolean
+  hasSkills?: boolean
 }
 
-export function Header({ portfolioInfo }: HeaderProps) {
+export function Header({ portfolioInfo, hasExperience = true, hasSkills = true }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-
+  const [activeSection, setActiveSection] = useState('')
+  const initials = portfolioInfo.name.split(' ').map((part) => part[0]).slice(0, 2).join('')
   const navItems = [
     { href: '#about', label: 'About' },
-    { href: '#experience', label: 'Experience' },
-    { href: '#skills', label: 'Skills' },
-    { href: '#dogs', label: 'My Dogs' },
+    ...(hasExperience ? [{ href: '#experience', label: 'Experience' }] : []),
+    ...(hasSkills ? [{ href: '#skills', label: 'Skills' }] : []),
+    { href: '#showcase', label: 'Showcase' },
   ]
 
-  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault()
-    const element = document.querySelector(href)
-    if (element) {
-      const headerOffset = 65
-      const elementPosition = element.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) setActiveSection(`#${entry.target.id}`)
+      }
+    }, { rootMargin: '-15% 0px -65% 0px' })
+    document.querySelectorAll('main section[id]').forEach((section) => observer.observe(section))
+    return () => observer.disconnect()
+  }, [])
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      })
+  useEffect(() => {
+    if (!isMenuOpen) return
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsMenuOpen(false)
     }
-    setIsMenuOpen(false)
-  }
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [isMenuOpen])
 
   return (
-    <>
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/20 bg-white/70 backdrop-blur-2xl backdrop-saturate-150 dark:border-white/10 dark:bg-white/5">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-          {/* Logo/Name with Initials */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative h-10 w-10 rounded-full ring-2 ring-white/20 bg-gradient-to-br from-primary via-purple-500 to-pink-500 transition-all group-hover:ring-primary/50 dark:ring-white/10 flex items-center justify-center shadow-lg">
-              <span className="text-lg font-bold text-white">NP</span>
-            </div>
-            <span className="text-lg font-mono font-semibold">
-              /natthanunp
-            </span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden items-center gap-1 md:flex">
-            {navItems.map((item) => (
-              <Button
-                key={item.href}
-                variant="ghost"
-                className="rounded-full hover:bg-white/50 dark:hover:bg-white/5 dark:hover:text-blue-400 transition-all duration-300"
-                asChild
-              >
-                <a href={item.href} onClick={(e) => handleScroll(e, item.href)}>{item.label}</a>
-              </Button>
-            ))}
-            <ThemeToggle />
-          </div>
-
-          {/* Mobile Menu Toggle */}
-          <div className="flex items-center gap-2 md:hidden">
-            <ThemeToggle />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
-          </div>
-        </nav>
-
-        {/* Mobile Navigation */}
+    <header className="site-header">
+      <nav className="nav-shell liquid-glass" aria-label="Main navigation">
+        <Link href="/#hero" className="brand" aria-label={`${portfolioInfo.name} — home`} onClick={() => setIsMenuOpen(false)}>
+          <span className="brand-mark">{initials}</span>
+          <span className="brand-name">{portfolioInfo.name.split(' ')[0]}<span className="brand-dot">.</span></span>
+        </Link>
+        <div className="desktop-nav">
+          {navItems.map((item) => (
+            <a key={item.href} href={item.href} className="nav-link" aria-current={activeSection === item.href ? 'location' : undefined}>{item.label}</a>
+          ))}
+        </div>
+        <div className="nav-actions">
+          <ThemeToggle />
+          <a href="#contact" className="nav-contact" onClick={() => setIsMenuOpen(false)}>Let’s talk <ArrowUpRight size={14} aria-hidden="true" /></a>
+          <button className="mobile-menu-button icon-button" onClick={() => setIsMenuOpen((open) => !open)} aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={isMenuOpen} aria-controls="mobile-navigation">
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
         {isMenuOpen && (
-          <div className="border-t border-white/20 bg-white/70 backdrop-blur-2xl dark:border-white/10 dark:bg-white/10 md:hidden">
-            <div className="mx-auto max-w-7xl px-4 py-4">
-              <div className="flex flex-col gap-2">
-                {navItems.map((item) => (
-                  <Button
-                    key={item.href}
-                    variant="ghost"
-                    className="w-full justify-start rounded-full hover:bg-white/50 dark:hover:bg-white/5 dark:hover:text-blue-400 transition-all duration-300"
-                    asChild
-                  >
-                    <a href={item.href} onClick={(e) => handleScroll(e, item.href)}>{item.label}</a>
-                  </Button>
-                ))}
-              </div>
-            </div>
+          <div id="mobile-navigation" className="mobile-nav">
+            {navItems.map((item) => (
+              <a key={item.href} href={item.href} className="nav-link" aria-current={activeSection === item.href ? 'location' : undefined} onClick={() => setIsMenuOpen(false)}>{item.label}<ArrowUpRight size={16} aria-hidden="true" /></a>
+            ))}
           </div>
         )}
-      </header>
-
-      {/* Spacer for fixed header */}
-      <div className="h-[65px]" />
-    </>
+      </nav>
+    </header>
   )
 }
